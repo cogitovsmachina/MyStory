@@ -25,7 +25,6 @@ end
 local function onBackgroundTouch( self, event )
 	-- go to level1.lua scene
 	storyboard.gotoScene( "scene1", "fade", 500 )
-	print("problem?")
 	return true	-- indicates successful touch
 end
 

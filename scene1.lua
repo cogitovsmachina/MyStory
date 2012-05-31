@@ -14,7 +14,8 @@ physics.start(); physics.pause()
 --------------------------------------------
 
 -- forward declarations and other locals
-local screenW, screenH, halfW = display.contentWidth, display.contentHeight, display.contentWidth*0.5
+local screenW, screenH, halfW, halfH = display.contentWidth, display.contentHeight, display.contentWidth*0.5, display.contentHeight*0.5
+
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -31,58 +32,48 @@ function scene:createScene( event )
 	-- create a grey rectangle as the backdrop
 	-- display a background image
 	background = display.newImageRect( "img_bosques.png", display.contentWidth, display.contentHeight )
-	background:setReferencePoint( display.TopLeftReferencePoint )
+	background:setReferencePoint(display.TopLeftReferencePoint)
 	background.x, background.y = 0, 0	
 	
 	-- make a pig (off-screen), position it, and rotate slightly
-	local pig1 = display.newImageRect("cerdito_mediano_a.png", 230, 320)
-	pig1:setReferencePoint(display.CenterLeftReferencePoint)
-	pig1.x, pig1.y = 160, -100
+	local mediumPig = display.newImageRect("cerdito_mediano_a.png", 230, 320)
+	mediumPig:setReferencePoint(display.CenterReferencePoint)
+	mediumPig.x, mediumPig.y = halfW -250, halfH + 150
 	--pig.rotation = 0
 
-	local pig2 = display.newImageRect("cerdito_pequenio_paja_a.png", 260, 320)
-	pig2:setReferencePoint(display.CenterRightReferencePoint)
-	pig2.x, pig2.y = 460, -100
+	local littlePig = display.newImageRect("cerdito_pequenio_paja_a.png", 260, 320)
+	littlePig:setReferencePoint(display.CenterReferencePoint)
+	littlePig.x, littlePig.y = halfW , halfH + 150
 
-	local pig3 = display.newImageRect("cerdito_pequenio.png", 330, 325)
-	pig3:setReferencePoint(display.CenterRightReferencePoint)
-	pig3.x, pig3.y = 460, -100
-	
-	-- add physics to the pig
-	physics.addBody( pig1, { density=1.0, friction=0.3, bounce=0.3 } )
-	physics.addBody( pig2, { density=1.0, friction=0.3, bounce=0.3 } )
-	physics.addBody( pig3, { density=1.0, friction=0.3, bounce=0.3 } )
+	local bigPig = display.newImageRect("cerdito_grande_a.png", 250, 355)
+	bigPig:setReferencePoint(display.CenterReferencePoint)
+	bigPig.x, bigPig.y = halfW +250 , halfH + 130
+----
 
-	
-	-- create a grass object and add physics (with custom shape)
-	local grass = display.newImageRect( "grass.png", screenW, 82 )
-	grass:setReferencePoint( display.BottomLeftReferencePoint )
-	grass.x, grass.y = 0, display.contentHeight
-	
-	-- define a shape that's slightly shorter than image bounds (set draw mode to "hybrid" or "debug" to see)
-	local grassShape = { -halfW,-34, halfW,-34, halfW,34, -halfW,34 }
-	physics.addBody( grass, "static", { friction=0.3, shape=grassShape } )
+----
 	
 	-- all display objects must be inserted into group
-	group:insert( background )
-	group:insert( grass)
-	group:insert( pig1 )
-	group:insert(pig2)
-	group:insert(pig3)
+	group:insert(background)
+	group:insert(littlePig)
+	group:insert(mediumPig)
+	group:insert(bigPig)
 end
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
 	local group = self.view
-	physics.start()
-	
+-- Narrator voice starts
+narrationSpeech = audio.loadSound("first_scene.mp3")
+
+-- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
+narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  
+
+
 end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
 	local group = self.view
-	
-	physics.stop()
 	
 end
 
@@ -91,6 +82,16 @@ function scene:destroyScene( event )
 	local group = self.view
 	package.loaded[physics] = nil
 	physics = nil
+end
+
+
+function NarrationFinished(event)
+    print("Narration Finished on channel", event.channel)
+    if event.completed then
+        print("Narration completed playback naturally")
+    else
+        print("Narration was stopped before completion")
+    end
 end
 
 -----------------------------------------------------------------------------------------
