@@ -1,4 +1,4 @@
--- level1.lua
+-- scene1.lua
 
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
@@ -12,7 +12,16 @@ physics.start(); physics.pause()
 -- forward declarations and other locals
 local screenW, screenH = display.contentWidth, display.contentHeight
 local halfW, halfH = display.contentWidth*0.5, display.contentHeight*0.5
+local mediumPig
 
+local function onPigTouch( self, event )
+	oink = audio.play(mid_oink)  
+
+--narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
+
+	print("Oink!")
+	return true	-- indicates successful touch
+end
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -32,7 +41,7 @@ function scene:createScene( event )
 	background.x, background.y = 0, 0	
 	
 	-- making some pigs!
-	local mediumPig = display.newImageRect("images/cerdito_mediano_a.png", 230, 320)
+	mediumPig = display.newImageRect("images/cerdito_mediano_a.png", 230, 320)
 	mediumPig:setReferencePoint(display.CenterReferencePoint)
 	mediumPig.x, mediumPig.y = halfW -250, halfH + 150
 
@@ -59,8 +68,12 @@ function scene:enterScene( event )
 	local group = self.view
 -- Narrator voice starts
 narrationSpeech = audio.loadSound("sounds/first_scene.mp3")
+	mid_oink = audio.loadSound("sounds/mid_oink.mp3")
 -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
-narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  
+narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
+	
+mediumPig.touch = onPigTouch
+mediumPig:addEventListener( "touch", mediumPig )
 
 end
 
@@ -85,6 +98,7 @@ function NarrationFinished(event)
     else
         print("Narration was stopped before completion")
     end
+
 end
 
 -----------------------------------------------------------------------------------------
