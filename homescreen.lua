@@ -3,24 +3,10 @@
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
--- include Corona's "widget" library
-local widget = require "widget"
-
 --------------------------------------------
 
 -- forward declarations and other locals
-local playBtn
-
 local background
--- 'onRelease' event listener for playBtn
-local function onPlayBtnRelease()
-	
-	-- go to level1.lua scene
-	storyboard.gotoScene( "scene1", "fade", 500 )
-	
-	return true	-- indicates successful touch
-end
-
 -- Touch listener function for background object
 local function onBackgroundTouch( self, event )
 	-- go to level1.lua scene

@@ -1,8 +1,4 @@
------------------------------------------------------------------------------------------
---
 -- level1.lua
---
------------------------------------------------------------------------------------------
 
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
@@ -14,7 +10,8 @@ physics.start(); physics.pause()
 --------------------------------------------
 
 -- forward declarations and other locals
-local screenW, screenH, halfW, halfH = display.contentWidth, display.contentHeight, display.contentWidth*0.5, display.contentHeight*0.5
+local screenW, screenH = display.contentWidth, display.contentHeight
+local halfW, halfH = display.contentWidth*0.5, display.contentHeight*0.5
 
 
 -----------------------------------------------------------------------------------------
@@ -29,17 +26,15 @@ local screenW, screenH, halfW, halfH = display.contentWidth, display.contentHeig
 function scene:createScene( event )
 	local group = self.view
 
-	-- create a grey rectangle as the backdrop
 	-- display a background image
 	background = display.newImageRect( "images/img_bosques.png", display.contentWidth, display.contentHeight )
 	background:setReferencePoint(display.TopLeftReferencePoint)
 	background.x, background.y = 0, 0	
 	
-	-- make a pig (off-screen), position it, and rotate slightly
+	-- making some pigs!
 	local mediumPig = display.newImageRect("images/cerdito_mediano_a.png", 230, 320)
 	mediumPig:setReferencePoint(display.CenterReferencePoint)
 	mediumPig.x, mediumPig.y = halfW -250, halfH + 150
-	--pig.rotation = 0
 
 	local littlePig = display.newImageRect("images/cerdito_pequenio_paja_a.png", 260, 320)
 	littlePig:setReferencePoint(display.CenterReferencePoint)
@@ -64,10 +59,8 @@ function scene:enterScene( event )
 	local group = self.view
 -- Narrator voice starts
 narrationSpeech = audio.loadSound("sounds/first_scene.mp3")
-
 -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
 narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  
-
 
 end
 
