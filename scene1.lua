@@ -23,6 +23,12 @@ local function onLittlePigTouch(self,event)
 	return true	
 end
 
+local function onBigPigTouch(self,event)
+	littlePigOink = audio.play(big_oink)
+	print("Big says: Oink!")
+	return true	
+end
+
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 -- 
@@ -67,19 +73,22 @@ end
 function scene:enterScene(event)
 	local group = self.view
 -- Narrator voice starts
-narrationSpeech = audio.loadSound("sounds/first_scene.mp3")
+	narrationSpeech = audio.loadSound("sounds/first_scene.mp3")
 	mid_oink = audio.loadSound("sounds/mid_oink.mp3")
 	little_oink = audio.loadSound("sounds/little_oink.mp3")
+	big_oink = audio.loadSound("sounds/big_oink.mp3")
 
 -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
-narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
+	narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
 	
-mediumPig.touch = onMediumPigTouch
-mediumPig:addEventListener("touch",mediumPig)
+	mediumPig.touch = onMediumPigTouch
+	mediumPig:addEventListener("touch",mediumPig)
 
-littlePig.touch = onLittlePigTouch
-littlePig:addEventListener("touch",littlePig)
+	littlePig.touch = onLittlePigTouch
+	littlePig:addEventListener("touch",littlePig)
 
+	bigPig.touch = onBigPigTouch
+	bigPig:addEventListener("touch", bigPig)
 end
 
 -- Called when scene is about to move offscreen:
