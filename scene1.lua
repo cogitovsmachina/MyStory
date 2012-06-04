@@ -1,7 +1,9 @@
 -- scene1.lua
 
 local storyboard = require("storyboard")
+local movieclip = require("movieclip")
 local scene = storyboard.newScene()
+
 
 --------------------------------------------
 
@@ -9,23 +11,33 @@ local scene = storyboard.newScene()
 local screenW, screenH = display.contentWidth, display.contentHeight
 local halfW, halfH = display.contentWidth*0.5, display.contentHeight*0.5
 local mediumPig, littlePig, bigPig
+local myAnim
 
 
 local function onMediumPigTouch(self,event)
-	oink = audio.play(mid_oink)
-	print("Medium says: Oink!")
-	return true	-- indicates successful touch
+	if (event.phase == "ended") then
+		oink = audio.play(mid_oink)
+		print("Medium says: Oink!")
+		myAnim = movieclip.newAnim{ "images/cerdito_mediano_a.png", "images/cerdito_mediano_b.png" }
+		myAnim.x, myAnim.y = halfW , halfH +150	
+		myAnim:play{ startFrame=1, endFrame=2, loop=1, remove=true }
+		return true	-- indicates successful touch
+	end
 end
 
 local function onLittlePigTouch(self,event)
-	littlePigOink = audio.play(little_oink)
-	print("Little says: Oink!")
+	if (event.phase == "ended") then
+		littlePigOink = audio.play(little_oink)
+		print("Little says: Oink!")
+	end
 	return true	
 end
 
 local function onBigPigTouch(self,event)
-	littlePigOink = audio.play(big_oink)
-	print("Big says: Oink!")
+	if (event.phase == "ended") then
+		littlePigOink = audio.play(big_oink)
+		print("Big says: Oink!")
+	end
 	return true	
 end
 
@@ -47,21 +59,18 @@ function scene:createScene( event )
 	background.x, background.y = 0,0	
 	
 	-- making some pigs!
+	littlePig = display.newImageRect("images/cerdito_pequeno_a.png",330,325)
+	littlePig:setReferencePoint(display.CenterReferencePoint)
+	littlePig.x, littlePig.y = halfW -270, halfH +150 
+
 	mediumPig = display.newImageRect("images/cerdito_mediano_a.png",230,320)
 	mediumPig:setReferencePoint(display.CenterReferencePoint)
-	mediumPig.x, mediumPig.y = halfW -250, halfH +150
-
-	littlePig = display.newImageRect("images/cerdito_pequenio_paja_a.png",260,320)
-	littlePig:setReferencePoint(display.CenterReferencePoint)
-	littlePig.x, littlePig.y = halfW , halfH +150
+	mediumPig.x, mediumPig.y = halfW , halfH +150
 
 	bigPig = display.newImageRect("images/cerdito_grande_a.png",250,355)
 	bigPig:setReferencePoint(display.CenterReferencePoint)
 	bigPig.x, bigPig.y = halfW +250 , halfH +130
-----
-
-----
-	
+		
 	-- all display objects must be inserted into group
 	group:insert(background)
 	group:insert(littlePig)
