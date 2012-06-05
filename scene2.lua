@@ -1,5 +1,4 @@
 -- scene1.lua
-
 local storyboard = require("storyboard")
 local movieclip = require("movieclip")
 local scene = storyboard.newScene()
@@ -16,7 +15,6 @@ local myAnim
 
 local function onNextButtonTouch(self,event)
 	if (event.phase == "ended") then
-		storyboard.gotoScene( "scene2", "slideLeft", 500 )
 		print("Next Button Pressed")
 	end
 	return true	
@@ -29,7 +27,7 @@ local function onMediumPigTouch(self,event)
 		myAnim = movieclip.newAnim{ "images/cerdito_mediano_a.png", "images/cerdito_mediano_b.png" }
 		myAnim.x, myAnim.y = halfW , halfH +150	
 		myAnim:setSpeed(1)
-		myAnim:play{startFrame=1, endFrame=2, loop=1, remove=true}
+		myAnim:play{ startFrame=1, endFrame=2, loop=1, remove=true }
 		return true	-- indicates successful touch
 	end
 end
@@ -59,11 +57,11 @@ end
 -----------------------------------------------------------------------------------------
 
 -- Called when the scene's view does not exist:
-function scene:createScene( event )
+function scene:createScene(event)
 	local group = self.view
 
 	-- display a background image
-	background = display.newImageRect("images/img_bosques.png", display.contentWidth, display.contentHeight)
+	background = display.newImageRect("images/background_botones.png", display.contentWidth, display.contentHeight)
 	background:setReferencePoint(display.TopLeftReferencePoint)
 	background.x, background.y = 0,0	
 	-- Adding Navigation Button
@@ -111,18 +109,15 @@ function scene:enterScene(event)
 
 	bigPig.touch = onBigPigTouch
 	bigPig:addEventListener("touch", bigPig)
-
-	nextButton.touch = onNextButtonTouch
-	nextButton:addEventListener("touch", nextButton)
 end
 
 -- Called when scene is about to move offscreen:
-function scene:exitScene(event)
+function scene:exitScene( event )
 	local group = self.view
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
-function scene:destroyScene(event)
+function scene:destroyScene( event )
 	local group = self.view
 	package.loaded[physics] = nil
 	physics = nil
@@ -136,6 +131,7 @@ function NarrationFinished(event)
     else
         print("Narration was stopped before completion")
     end
+
 end
 
 -----------------------------------------------------------------------------------------
@@ -143,18 +139,18 @@ end
 -----------------------------------------------------------------------------------------
 
 -- "createScene" event is dispatched if scene's view does not exist
-scene:addEventListener( "createScene", scene )
+scene:addEventListener("createScene",scene)
 
 -- "enterScene" event is dispatched whenever scene transition has finished
-scene:addEventListener( "enterScene", scene )
+scene:addEventListener("enterScene",scene)
 
 -- "exitScene" event is dispatched whenever before next scene's transition begins
-scene:addEventListener( "exitScene", scene )
+scene:addEventListener("exitScene",scene)
 
 -- "destroyScene" event is dispatched before view is unloaded, which can be
 -- automatically unloaded in low memory situations, or explicitly via a call to
 -- storyboard.purgeScene() or storyboard.removeScene().
-scene:addEventListener( "destroyScene", scene )
+scene:addEventListener("destroyScene",scene)
 
 -----------------------------------------------------------------------------------------
 
