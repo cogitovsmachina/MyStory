@@ -1,5 +1,4 @@
--- scene1.lua
-
+-- scene3.lua
 local storyboard = require("storyboard")
 local movieclip = require("movieclip")
 local scene = storyboard.newScene()
@@ -11,12 +10,11 @@ local scene = storyboard.newScene()
 local screenW, screenH = display.contentWidth, display.contentHeight
 local halfW, halfH = display.contentWidth*0.5, display.contentHeight*0.5
 local mediumPig, littlePig, bigPig
-local nextButton
+local firstOption, secondOption
 local myAnim
 
 local function onNextButtonTouch(self,event)
 	if (event.phase == "ended") then
-		storyboard.gotoScene( "scene2", "slideLeft", 500 )
 		print("Next Button Pressed")
 	end
 	return true	
@@ -29,7 +27,7 @@ local function onMediumPigTouch(self,event)
 		myAnim = movieclip.newAnim{ "images/cerdito_mediano_a.png", "images/cerdito_mediano_b.png" }
 		myAnim.x, myAnim.y = halfW , halfH +150	
 		myAnim:setSpeed(1)
-		myAnim:play{startFrame=1, endFrame=2, loop=1, remove=true}
+		myAnim:play{ startFrame=1, endFrame=2, loop=1, remove=true }
 		return true	-- indicates successful touch
 	end
 end
@@ -59,78 +57,68 @@ end
 -----------------------------------------------------------------------------------------
 
 -- Called when the scene's view does not exist:
-function scene:createScene( event )
+function scene:createScene(event)
 	local group = self.view
 
+	-- Purging last Scene
+	storyboard.purgeScene("scene2")
+
 	-- display a background image
-	background = display.newImageRect("images/img_bosques.png", display.contentWidth, display.contentHeight)
+	background = display.newImageRect("images/background_botones.png", display.contentWidth, display.contentHeight)
 	background:setReferencePoint(display.TopLeftReferencePoint)
 	background.x, background.y = 0,0	
 	-- Adding Navigation Button
-	nextButton = display.newImageRect("images/next_button_a.png",105,105)
-	nextButton:setReferencePoint(display.CenterReferencePoint)
-	nextButton.x, nextButton.y = screenW-75, screenH-150
-	-- making some pigs!
-	littlePig = display.newImageRect("images/cerdito_pequeno_a.png",330,325)
-	littlePig:setReferencePoint(display.CenterReferencePoint)
-	littlePig.x, littlePig.y = halfW -270, halfH +150 
+	firstOption = display.newImageRect("images/boton_dos_pequeno.png",450,450)
+	firstOption:setReferencePoint(display.CenterReferencePoint)
+	firstOption.x, firstOption.y = halfH, halfW-50
 
-	mediumPig = display.newImageRect("images/cerdito_mediano_a.png",230,320)
-	mediumPig:setReferencePoint(display.CenterReferencePoint)
-	mediumPig.x, mediumPig.y = halfW , halfH +150
+	secondOption = display.newImageRect("images/boton_uno_pequeno.png",450,450)
+	secondOption:setReferencePoint(display.CenterReferencePoint)
+	secondOption.x, secondOption.y = halfH, halfW+150
+	
 
-	bigPig = display.newImageRect("images/cerdito_grande_a.png",250,355)
-	bigPig:setReferencePoint(display.CenterReferencePoint)
-	bigPig.x, bigPig.y = halfW +250 , halfH +130
+
+
 		
 	-- all display objects must be inserted into group
 	group:insert(background)
-	group:insert(littlePig)
-	group:insert(mediumPig)
-	group:insert(bigPig)
-	group:insert(nextButton)
+	group:insert(firstOption)
+	group:insert(secondOption)
 end
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene(event)
 	local group = self.view
+
 -- Narrator voice starts
-	narrationSpeech = audio.loadSound("sounds/first_scene.mp3")
-	mid_oink = audio.loadSound("sounds/mid_oink.mp3")
-	little_oink = audio.loadSound("sounds/little_oink.mp3")
-	big_oink = audio.loadSound("sounds/big_oink.mp3")
+	narrationSpeech = audio.loadSound("sounds/third_scene.mp3")
+	--mid_oink = audio.loadSound("sounds/mid_oink.mp3")
+	--little_oink = audio.loadSound("sounds/little_oink.mp3")
+	--big_oink = audio.loadSound("sounds/big_oink.mp3")
 
 -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
 	narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
 	
-	mediumPig.touch = onMediumPigTouch
-	mediumPig:addEventListener("touch",mediumPig)
+	--mediumPig.touch = onMediumPigTouch
+	--mediumPig:addEventListener("touch",mediumPig)
 
-	littlePig.touch = onLittlePigTouch
-	littlePig:addEventListener("touch",littlePig)
+	--littlePig.touch = onLittlePigTouch
+	--littlePig:addEventListener("touch",littlePig)
 
-	bigPig.touch = onBigPigTouch
-	bigPig:addEventListener("touch", bigPig)
-
-	nextButton.touch = onNextButtonTouch
-	nextButton:addEventListener("touch", nextButton)
+	--bigPig.touch = onBigPigTouch
+	--bigPig:addEventListener("touch", bigPig)
 end
 
 -- Called when scene is about to move offscreen:
-function scene:exitScene(event)
+function scene:exitScene( event )
 	local group = self.view
-	-- remove unused elements
-	audio.stop(narrationChannel)
-	littlePig:removeEventListener("touch",littlePig)
-	mediumPig:removeEventListener("touch",mediumPig)
-	bigPig:removeEventListener("touch",bigPig)
-
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
-function scene:destroyScene(event)
+function scene:destroyScene( event )
 	local group = self.view
-
+	package.loaded[physics] = nil
+	physics = nil
 end
 
 
@@ -141,6 +129,7 @@ function NarrationFinished(event)
     else
         print("Narration was stopped before completion")
     end
+
 end
 
 -----------------------------------------------------------------------------------------
@@ -148,18 +137,18 @@ end
 -----------------------------------------------------------------------------------------
 
 -- "createScene" event is dispatched if scene's view does not exist
-scene:addEventListener( "createScene", scene )
+scene:addEventListener("createScene",scene)
 
 -- "enterScene" event is dispatched whenever scene transition has finished
-scene:addEventListener( "enterScene", scene )
+scene:addEventListener("enterScene",scene)
 
 -- "exitScene" event is dispatched whenever before next scene's transition begins
-scene:addEventListener( "exitScene", scene )
+scene:addEventListener("exitScene",scene)
 
 -- "destroyScene" event is dispatched before view is unloaded, which can be
 -- automatically unloaded in low memory situations, or explicitly via a call to
 -- storyboard.purgeScene() or storyboard.removeScene().
-scene:addEventListener( "destroyScene", scene )
+scene:addEventListener("destroyScene",scene)
 
 -----------------------------------------------------------------------------------------
 

@@ -1,4 +1,4 @@
--- scene1.lua
+-- scene2.lua
 local storyboard = require("storyboard")
 local movieclip = require("movieclip")
 local scene = storyboard.newScene()
@@ -10,11 +10,12 @@ local scene = storyboard.newScene()
 local screenW, screenH = display.contentWidth, display.contentHeight
 local halfW, halfH = display.contentWidth*0.5, display.contentHeight*0.5
 local mediumPig, littlePig, bigPig
-local nextButton
+local firstOption, secondOption
 local myAnim
 
 local function onNextButtonTouch(self,event)
 	if (event.phase == "ended") then
+		storyboard.gotoScene( "scene3", "slideLeft", 500 )
 		print("Next Button Pressed")
 	end
 	return true	
@@ -60,6 +61,9 @@ end
 function scene:createScene(event)
 	local group = self.view
 
+	-- Purging last Scene
+	storyboard.purgeScene("scene1")
+
 	-- display a background image
 	background = display.newImageRect("images/background_botones.png", display.contentWidth, display.contentHeight)
 	background:setReferencePoint(display.TopLeftReferencePoint)
@@ -67,48 +71,37 @@ function scene:createScene(event)
 	-- Adding Navigation Button
 	nextButton = display.newImageRect("images/next_button_a.png",105,105)
 	nextButton:setReferencePoint(display.CenterReferencePoint)
-	nextButton.x, nextButton.y = screenW-75, screenH-150
-	-- making some pigs!
-	littlePig = display.newImageRect("images/cerdito_pequeno_a.png",330,325)
-	littlePig:setReferencePoint(display.CenterReferencePoint)
-	littlePig.x, littlePig.y = halfW -270, halfH +150 
+	nextButton.x, nextButton.y = screenW-75, screenH-150	
 
-	mediumPig = display.newImageRect("images/cerdito_mediano_a.png",230,320)
-	mediumPig:setReferencePoint(display.CenterReferencePoint)
-	mediumPig.x, mediumPig.y = halfW , halfH +150
-
-	bigPig = display.newImageRect("images/cerdito_grande_a.png",250,355)
-	bigPig:setReferencePoint(display.CenterReferencePoint)
-	bigPig.x, bigPig.y = halfW +250 , halfH +130
 		
 	-- all display objects must be inserted into group
 	group:insert(background)
-	group:insert(littlePig)
-	group:insert(mediumPig)
-	group:insert(bigPig)
 	group:insert(nextButton)
 end
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene(event)
 	local group = self.view
+
+-- Purging last Scene
+	storyboard.purgeScene("scene1")
 -- Narrator voice starts
-	narrationSpeech = audio.loadSound("sounds/first_scene.mp3")
-	mid_oink = audio.loadSound("sounds/mid_oink.mp3")
-	little_oink = audio.loadSound("sounds/little_oink.mp3")
-	big_oink = audio.loadSound("sounds/big_oink.mp3")
+	--narrationSpeech = audio.loadSound("sounds/third_scene.mp3")
+	--mid_oink = audio.loadSound("sounds/mid_oink.mp3")
+	--little_oink = audio.loadSound("sounds/little_oink.mp3")
+	--big_oink = audio.loadSound("sounds/big_oink.mp3")
 
 -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
-	narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
+	--narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
 	
-	mediumPig.touch = onMediumPigTouch
-	mediumPig:addEventListener("touch",mediumPig)
+	--mediumPig.touch = onMediumPigTouch
+	--mediumPig:addEventListener("touch",mediumPig)
 
-	littlePig.touch = onLittlePigTouch
-	littlePig:addEventListener("touch",littlePig)
+	--littlePig.touch = onLittlePigTouch
+	--littlePig:addEventListener("touch",littlePig)
 
-	bigPig.touch = onBigPigTouch
-	bigPig:addEventListener("touch", bigPig)
+	nextButton.touch = onNextButtonTouch
+	nextButton:addEventListener("touch", nextButton)
 end
 
 -- Called when scene is about to move offscreen:
@@ -119,8 +112,6 @@ end
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
 function scene:destroyScene( event )
 	local group = self.view
-	package.loaded[physics] = nil
-	physics = nil
 end
 
 
