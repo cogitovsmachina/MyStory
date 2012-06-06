@@ -21,6 +21,14 @@ local function onNextButtonTouch(self,event)
 	return true	
 end
 
+local function onBackButtonTouch(self,event)
+	if (event.phase == "ended") then
+		storyboard.gotoScene( "scene1", "slideRight", 500 )
+		print("Back Button Pressed")
+	end
+	return true	
+end
+
 local function onMediumPigTouch(self,event)
 	if (event.phase == "ended") then
 		oink = audio.play(mid_oink)
@@ -71,12 +79,17 @@ function scene:createScene(event)
 	-- Adding Navigation Button
 	nextButton = display.newImageRect("images/next_button_a.png",105,105)
 	nextButton:setReferencePoint(display.CenterReferencePoint)
-	nextButton.x, nextButton.y = screenW-75, screenH-150	
+	nextButton.x, nextButton.y = screenW-75, screenH-150
+
+	backButton = display.newImageRect("images/back_button_a.png",105,105)
+	backButton:setReferencePoint(display.CenterReferencePoint)
+	backButton.x, backButton.y = screenW-1205, screenH-150
 
 		
 	-- all display objects must be inserted into group
 	group:insert(background)
 	group:insert(nextButton)
+	group:insert(backButton)
 end
 
 -- Called immediately after scene has moved onscreen:
@@ -101,7 +114,10 @@ function scene:enterScene(event)
 	--littlePig:addEventListener("touch",littlePig)
 
 	nextButton.touch = onNextButtonTouch
-	nextButton:addEventListener("touch", nextButton)
+	nextButton:addEventListener("touch",nextButton)
+
+	backButton.touch = onBackButtonTouch
+	backButton:addEventListener("touch",backButton)
 end
 
 -- Called when scene is about to move offscreen:

@@ -20,34 +20,6 @@ local function onNextButtonTouch(self,event)
 	return true	
 end
 
-local function onMediumPigTouch(self,event)
-	if (event.phase == "ended") then
-		oink = audio.play(mid_oink)
-		print("Medium says: Oink!")
-		myAnim = movieclip.newAnim{ "images/cerdito_mediano_a.png", "images/cerdito_mediano_b.png" }
-		myAnim.x, myAnim.y = halfW , halfH +150	
-		myAnim:setSpeed(1)
-		myAnim:play{ startFrame=1, endFrame=2, loop=1, remove=true }
-		return true	-- indicates successful touch
-	end
-end
-
-local function onLittlePigTouch(self,event)
-	if (event.phase == "ended") then
-		littlePigOink = audio.play(little_oink)
-		print("Little says: Oink!")
-	end
-	return true	
-end
-
-local function onBigPigTouch(self,event)
-	if (event.phase == "ended") then
-		littlePigOink = audio.play(big_oink)
-		print("Big says: Oink!")
-	end
-	return true	
-end
-
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 -- 
@@ -68,13 +40,13 @@ function scene:createScene(event)
 	background:setReferencePoint(display.TopLeftReferencePoint)
 	background.x, background.y = 0,0	
 	-- Adding Navigation Button
-	firstOption = display.newImageRect("images/boton_dos_pequeno.png",450,450)
+	firstOption = display.newImageRect("images/boton_uno_pequeno.png",450,450)
 	firstOption:setReferencePoint(display.CenterReferencePoint)
-	firstOption.x, firstOption.y = halfH, halfW-50
+	firstOption.x, firstOption.y = halfW-250, halfH
 
-	secondOption = display.newImageRect("images/boton_uno_pequeno.png",450,450)
+	secondOption = display.newImageRect("images/boton_dos_pequeno.png",450,450)
 	secondOption:setReferencePoint(display.CenterReferencePoint)
-	secondOption.x, secondOption.y = halfH, halfW+150
+	secondOption.x, secondOption.y = halfW+250, halfH
 	
 
 
@@ -92,21 +64,8 @@ function scene:enterScene(event)
 
 -- Narrator voice starts
 	narrationSpeech = audio.loadSound("sounds/third_scene.mp3")
-	--mid_oink = audio.loadSound("sounds/mid_oink.mp3")
-	--little_oink = audio.loadSound("sounds/little_oink.mp3")
-	--big_oink = audio.loadSound("sounds/big_oink.mp3")
-
 -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
 	narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
-	
-	--mediumPig.touch = onMediumPigTouch
-	--mediumPig:addEventListener("touch",mediumPig)
-
-	--littlePig.touch = onLittlePigTouch
-	--littlePig:addEventListener("touch",littlePig)
-
-	--bigPig.touch = onBigPigTouch
-	--bigPig:addEventListener("touch", bigPig)
 end
 
 -- Called when scene is about to move offscreen:
@@ -117,8 +76,6 @@ end
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
 function scene:destroyScene( event )
 	local group = self.view
-	package.loaded[physics] = nil
-	physics = nil
 end
 
 
