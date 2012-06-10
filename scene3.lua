@@ -20,6 +20,14 @@ local function onNextButtonTouch(self,event)
 	return true	
 end
 
+local function onBackButtonTouch(self,event)
+	if (event.phase == "ended") then
+		storyboard.gotoScene( "scene2", "slideRight", 500 )
+		print("Back Button Pressed")
+	end
+	return true	
+end
+
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 -- 
@@ -47,6 +55,10 @@ function scene:createScene(event)
 	secondOption = display.newImageRect("images/boton_dos_pequeno.png",450,450)
 	secondOption:setReferencePoint(display.CenterReferencePoint)
 	secondOption.x, secondOption.y = halfW+250, halfH
+
+	backButton = display.newImageRect("images/back_button_a.png",105,105)
+	backButton:setReferencePoint(display.CenterReferencePoint)
+	backButton.x, backButton.y = screenW-1205, screenH-150
 	
 
 
@@ -56,6 +68,7 @@ function scene:createScene(event)
 	group:insert(background)
 	group:insert(firstOption)
 	group:insert(secondOption)
+	group:insert(backButton)
 end
 
 -- Called immediately after scene has moved onscreen:
@@ -66,11 +79,18 @@ function scene:enterScene(event)
 	narrationSpeech = audio.loadSound("sounds/third_scene.mp3")
 -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
 	narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
+
+	backButton.touch = onBackButtonTouch
+	backButton:addEventListener("touch",backButton)
 end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
 	local group = self.view
+
+	-- remove unused elements
+	audio.stop(narrationChannel)
+	backButton:removeEventListener("touch",backButton)
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:

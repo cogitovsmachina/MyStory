@@ -12,7 +12,7 @@ local screenW, screenH = display.contentWidth, display.contentHeight
 local halfW, halfH = display.contentWidth*0.5, display.contentHeight*0.5
 local mediumPig, littlePig, bigPig
 local nextButton
-local myAnim
+local myAnim, treeAnimation
 
 local function onNextButtonTouch(self,event)
 	if (event.phase == "ended") then
@@ -26,6 +26,8 @@ local function onMediumPigTouch(self,event)
 	if (event.phase == "ended") then
 		oink = audio.play(mid_oink)
 		print("Medium says: Oink!")
+
+		-- Start animations
 		myAnim = movieclip.newAnim{ "images/cerdito_mediano_a.png", "images/cerdito_mediano_b.png" }
 		myAnim.x, myAnim.y = halfW , halfH +150	
 		myAnim:setSpeed(1)
@@ -62,6 +64,14 @@ end
 function scene:createScene( event )
 	local group = self.view
 
+
+-- Starting tree animation
+
+	treeAnimation = movieclip.newAnim{ "sprites/tree_1.png","sprites/tree_2.png","sprites/tree_3.png",
+	"sprites/tree_4.png","sprites/tree_5.png","sprites/tree_6.png","sprites/tree_7.png"}
+	treeAnimation.x, treeAnimation.y = halfW-200 , halfH	
+	treeAnimation:setSpeed(1)
+
 	-- display a background image
 	background = display.newImageRect("images/img_bosques.png", display.contentWidth, display.contentHeight)
 	background:setReferencePoint(display.TopLeftReferencePoint)
@@ -94,6 +104,9 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene(event)
 	local group = self.view
+	-- Starting Tree Animation
+	treeAnimation:play{startFrame=1, endFrame=7, loop=1, remove=false}
+
 -- Narrator voice starts
 	narrationSpeech = audio.loadSound("sounds/first_scene.mp3")
 	mid_oink = audio.loadSound("sounds/mid_oink.mp3")
@@ -124,13 +137,15 @@ function scene:exitScene(event)
 	littlePig:removeEventListener("touch",littlePig)
 	mediumPig:removeEventListener("touch",mediumPig)
 	bigPig:removeEventListener("touch",bigPig)
+	treeAnimation:removeEventListener("touch",treeAnimation)
+	treeAnimation:stop()
+
 
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
 function scene:destroyScene(event)
 	local group = self.view
-
 end
 
 
