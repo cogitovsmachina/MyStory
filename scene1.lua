@@ -11,7 +11,7 @@ local screenW, screenH = display.contentWidth, display.contentHeight
 local halfW, halfH = display.contentWidth*0.5, display.contentHeight*0.5
 local mediumPig, littlePig, bigPig
 local nextButton
-local myAnim, treeAnimation
+local myAnim, tree
 
 local function onNextButtonTouch(self,event)
 	if (event.phase == "ended") then
@@ -62,14 +62,16 @@ end
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
 	local group = self.view
+  
+local listener3 = function( obj )
+        print( "Tree has done transition" .. tostring( obj ) )
+end
 
-
--- Starting tree animation
-	treeAnimation = movieclip.newAnim{ "sprites/tree_1.png","sprites/tree_2.png","sprites/tree_3.png",
-	"sprites/tree_4.png","sprites/tree_5.png","sprites/tree_6.png","sprites/tree_7.png"}
-	treeAnimation.x, treeAnimation.y = halfW-200 , halfH	
-	treeAnimation:setSpeed(.5)
-	transition.to(treeAnimation, {time= 500, transition=easing.inQuad,delay=600, alpha=1})
+	tree = display.newImageRect("images/scene1/tree.png",400,500)
+	tree:setReferencePoint(display.BottomLeftReferencePoint)
+	tree.x, tree.y = 0,650
+	tree.alpha = 0
+	transition.to( tree, { time=500, delay=2500, alpha=1.0, onComplete=listener3} ) 
 
 	-- display a background image
 	background = display.newImageRect("images/scene1/img_bosques.png", display.contentWidth, display.contentHeight)
@@ -91,21 +93,21 @@ function scene:createScene( event )
 	bigPig = display.newImageRect("images/scene1/cerdito_grande_a.png",250,355)
 	bigPig:setReferencePoint(display.CenterReferencePoint)
 	bigPig.x, bigPig.y = halfW +250 , halfH +130
-		
+
 	-- all display objects must be inserted into group
 	group:insert(background)
 	group:insert(littlePig)
 	group:insert(mediumPig)
 	group:insert(bigPig)
 	group:insert(nextButton)
-	group:insert(treeAnimation)
+	--group:insert(tree)
 end
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene(event)
 	local group = self.view
 	-- Starting Tree Animation
-	treeAnimation:play{startFrame=1, endFrame=7, loop=1, remove=false}
+	--treeAnimation:play{startFrame=1, endFrame=7, loop=1, remove=false}
 
 -- Narrator voice starts
 	narrationSpeech = audio.loadSound("sounds/first_scene.mp3")

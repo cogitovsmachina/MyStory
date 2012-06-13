@@ -50,8 +50,16 @@ end
 
 local function onBigPigTouch(self,event)
 	if (event.phase == "ended") then
-		littlePigOink = audio.play(big_oink)
+		bigPigOink = audio.play(big_oink)
 		print("Big says: Oink!")
+	end
+	return true	
+end
+
+local function onWolfTouch(self,event)
+	if (event.phase == "ended") then
+		wolf = audio.play(wolf_sound)
+		print("Wolf Says: auuuuuu!")
 	end
 	return true	
 end
@@ -117,13 +125,15 @@ function scene:enterScene(event)
 
 -- Purging last Scene
 	storyboard.purgeScene("scene1")
--- Narrator voice starts
+-- Loading scenes into memory
 	narrationSpeech = audio.loadSound("sounds/second_scene.mp3")
 	mid_oink = audio.loadSound("sounds/mid_oink.mp3")
 	little_oink = audio.loadSound("sounds/little_oink.mp3")
 	big_oink = audio.loadSound("sounds/big_oink.mp3")
+	wolf_sound = audio.loadSound("sounds/wolf.mp3")
 
--- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
+-- play the speech on any available channel, for at most 30 seconds, 
+-- and invoke a callback when the audio finishes playing
 	narrationChannel = audio.play( narrationSpeech, { duration=30000, onComplete=NarrationFinished } )  -- play the speech on any available channel, for at most 30 seconds, and invoke a callback when the audio finishes playing
 	
 	bigPig.touch = onBigPigTouch
@@ -140,6 +150,9 @@ function scene:enterScene(event)
 
 	backButton.touch = onBackButtonTouch
 	backButton:addEventListener("touch",backButton)
+
+	wolf.touch = onWolfTouch
+	wolf:addEventListener("touch",wolf)
 end
 
 -- Called when scene is about to move offscreen:
@@ -150,6 +163,8 @@ function scene:exitScene( event )
 	littlePig:removeEventListener("touch",littlePig)
 	mediumPig:removeEventListener("touch",mediumPig)
 	bigPig:removeEventListener("touch",bigPig)
+	audio.stop(wolf_sound)
+
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
