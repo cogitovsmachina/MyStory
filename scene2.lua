@@ -9,7 +9,7 @@ local scene = storyboard.newScene()
 -- forward declarations and other locals
 local screenW, screenH = display.contentWidth, display.contentHeight
 local halfW, halfH = display.contentWidth*0.5, display.contentHeight*0.5
-local mediumPig, littlePig, bigPig
+local bigPig, littlePig, mediumPig
 local firstOption, secondOption
 local myAnim
 
@@ -33,7 +33,7 @@ local function onMediumPigTouch(self,event)
 	if (event.phase == "ended") then
 		oink = audio.play(mid_oink)
 		print("Medium says: Oink!")
-		myAnim = movieclip.newAnim{ "images/scene2/cerdito_mediano_a.png", "images/cerdito_mediano_b.png" }
+		myAnim = movieclip.newAnim{ "images/scene2/cerdito_mediano_a.png", "images/scene2/cerdito_mediano_b.png" }
 		myAnim.x, myAnim.y = halfW , halfH +150	
 		myAnim:setSpeed(1)
 		myAnim:play{ startFrame=1, endFrame=2, loop=1, remove=true }
@@ -85,11 +85,31 @@ function scene:createScene(event)
 	backButton:setReferencePoint(display.CenterReferencePoint)
 	backButton.x, backButton.y = screenW-1205, screenH-150
 
-		
+	bigPig = display.newImageRect("images/scene2/bigpig_1.png", 350,420)
+	bigPig:setReferencePoint(display.CenterReferencePoint)
+	bigPig.x, bigPig.y = screenW*.3, screenH*.74
+
+	littlePig = display.newImageRect("images/scene2/littlepig_1.png", 350,420)
+	littlePig:setReferencePoint(display.CenterReferencePoint)
+	littlePig.x, littlePig.y = screenW*.53, screenH*.74
+
+	mediumPig = display.newImageRect("images/scene2/middlepig_1.png", 350,420)
+	mediumPig:setReferencePoint(display.CenterReferencePoint)
+	mediumPig.x, mediumPig.y = screenW*.75, screenH*.74
+
+	wolf = display.newImageRect("images/scene2/wolf_1.png", 780, 450)
+	wolf:setReferencePoint(display.CenterReferencePoint)
+	wolf.x, wolf.y = screenW*.65, screenH*.3
+
+
 	-- all display objects must be inserted into group
 	group:insert(background)
 	group:insert(nextButton)
 	group:insert(backButton)
+	group:insert(bigPig)
+	group:insert(littlePig)
+	group:insert(mediumPig)
+	group:insert(wolf)
 end
 
 -- Called immediately after scene has moved onscreen:
