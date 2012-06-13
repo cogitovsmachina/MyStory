@@ -73,7 +73,7 @@ function scene:createScene(event)
 	storyboard.purgeScene("scene1")
 
 	-- display a background image
-	background = display.newImageRect("images/scene2/background_botones.png", display.contentWidth, display.contentHeight)
+	background = display.newImageRect("images/scene2/bg_sky.png", display.contentWidth, display.contentHeight)
 	background:setReferencePoint(display.TopLeftReferencePoint)
 	background.x, background.y = 0,0	
 	-- Adding Navigation Button

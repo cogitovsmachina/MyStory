@@ -9,7 +9,7 @@ local scene = storyboard.newScene()
 -- forward declarations and other locals
 local screenW, screenH = display.contentWidth, display.contentHeight
 local halfW, halfH = display.contentWidth*0.5, display.contentHeight*0.5
-local mediumPig, littlePig, bigPig
+local background, mediumPig, littlePig, bigPig
 local firstOption, secondOption
 local myAnim
 
@@ -44,25 +44,22 @@ function scene:createScene(event)
 	storyboard.purgeScene("scene2")
 
 	-- display a background image
-	background = display.newImageRect("images/background_botones.png", display.contentWidth, display.contentHeight)
+	background = display.newImageRect("images/scene3/background_botones.png", display.contentWidth, display.contentHeight)
 	background:setReferencePoint(display.TopLeftReferencePoint)
 	background.x, background.y = 0,0	
 	-- Adding Navigation Button
-	firstOption = display.newImageRect("images/boton_uno_pequeno.png",450,450)
+	firstOption = display.newImageRect("images/scene3/boton_uno_pequeno.png",450,450)
 	firstOption:setReferencePoint(display.CenterReferencePoint)
 	firstOption.x, firstOption.y = halfW-250, halfH
 
-	secondOption = display.newImageRect("images/boton_dos_pequeno.png",450,450)
+	secondOption = display.newImageRect("images/scene3/boton_dos_pequeno.png",450,450)
 	secondOption:setReferencePoint(display.CenterReferencePoint)
 	secondOption.x, secondOption.y = halfW+250, halfH
 
-	backButton = display.newImageRect("images/back_button_a.png",105,105)
+	backButton = display.newImageRect("images/generic_scene/back_button_a.png",105,105)
 	backButton:setReferencePoint(display.CenterReferencePoint)
 	backButton.x, backButton.y = screenW-1205, screenH-150
 	
-
-
-
 		
 	-- all display objects must be inserted into group
 	group:insert(background)
