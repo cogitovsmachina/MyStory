@@ -28,7 +28,7 @@ function scene:createScene( event )
 	local group = self.view
 
 	-- display a background image
-	background = display.newImageRect( "images/splash.png", display.contentWidth, display.contentHeight )
+	background = display.newImageRect( "images/homescreen/splash.png", display.contentWidth, display.contentHeight )
 	background:setReferencePoint( display.TopLeftReferencePoint )
 	background.x, background.y = 0, 0
 	

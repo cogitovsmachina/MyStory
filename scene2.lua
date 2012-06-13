@@ -33,7 +33,7 @@ local function onMediumPigTouch(self,event)
 	if (event.phase == "ended") then
 		oink = audio.play(mid_oink)
 		print("Medium says: Oink!")
-		myAnim = movieclip.newAnim{ "images/cerdito_mediano_a.png", "images/cerdito_mediano_b.png" }
+		myAnim = movieclip.newAnim{ "images/scene2/cerdito_mediano_a.png", "images/cerdito_mediano_b.png" }
 		myAnim.x, myAnim.y = halfW , halfH +150	
 		myAnim:setSpeed(1)
 		myAnim:play{ startFrame=1, endFrame=2, loop=1, remove=true }
@@ -73,15 +73,15 @@ function scene:createScene(event)
 	storyboard.purgeScene("scene1")
 
 	-- display a background image
-	background = display.newImageRect("images/background_botones.png", display.contentWidth, display.contentHeight)
+	background = display.newImageRect("images/scene2/background_botones.png", display.contentWidth, display.contentHeight)
 	background:setReferencePoint(display.TopLeftReferencePoint)
 	background.x, background.y = 0,0	
 	-- Adding Navigation Button
-	nextButton = display.newImageRect("images/next_button_a.png",105,105)
+	nextButton = display.newImageRect("images/generic_scene/next_button_a.png",105,105)
 	nextButton:setReferencePoint(display.CenterReferencePoint)
 	nextButton.x, nextButton.y = screenW-75, screenH-150
 
-	backButton = display.newImageRect("images/back_button_a.png",105,105)
+	backButton = display.newImageRect("images/generic_scene/back_button_a.png",105,105)
 	backButton:setReferencePoint(display.CenterReferencePoint)
 	backButton.x, backButton.y = screenW-1205, screenH-150
 

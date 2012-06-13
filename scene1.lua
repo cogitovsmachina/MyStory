@@ -4,7 +4,6 @@ local storyboard = require("storyboard")
 local movieclip = require("movieclip")
 local scene = storyboard.newScene()
 
-
 --------------------------------------------
 
 -- forward declarations and other locals
@@ -28,7 +27,7 @@ local function onMediumPigTouch(self,event)
 		print("Medium says: Oink!")
 
 		-- Start animations
-		myAnim = movieclip.newAnim{ "images/cerdito_mediano_a.png", "images/cerdito_mediano_b.png" }
+		myAnim = movieclip.newAnim{ "images/scene1/cerdito_mediano_a.png", "images/scene1/cerdito_mediano_b.png" }
 		myAnim.x, myAnim.y = halfW , halfH +150	
 		myAnim:setSpeed(1)
 		myAnim:play{startFrame=1, endFrame=2, loop=1, remove=true}
@@ -66,30 +65,30 @@ function scene:createScene( event )
 
 
 -- Starting tree animation
-
 	treeAnimation = movieclip.newAnim{ "sprites/tree_1.png","sprites/tree_2.png","sprites/tree_3.png",
 	"sprites/tree_4.png","sprites/tree_5.png","sprites/tree_6.png","sprites/tree_7.png"}
 	treeAnimation.x, treeAnimation.y = halfW-200 , halfH	
-	treeAnimation:setSpeed(1)
+	treeAnimation:setSpeed(.5)
+	transition.to(treeAnimation, {time= 500, transition=easing.inQuad,delay=600, alpha=1})
 
 	-- display a background image
-	background = display.newImageRect("images/img_bosques.png", display.contentWidth, display.contentHeight)
+	background = display.newImageRect("images/scene1/img_bosques.png", display.contentWidth, display.contentHeight)
 	background:setReferencePoint(display.TopLeftReferencePoint)
 	background.x, background.y = 0,0	
 	-- Adding Navigation Button
-	nextButton = display.newImageRect("images/next_button_a.png",105,105)
+	nextButton = display.newImageRect("images/generic_scene/next_button_a.png",105,105)
 	nextButton:setReferencePoint(display.CenterReferencePoint)
 	nextButton.x, nextButton.y = screenW-75, screenH-150
 	-- making some pigs!
-	littlePig = display.newImageRect("images/cerdito_pequeno_a.png",330,325)
+	littlePig = display.newImageRect("images/scene1/cerdito_pequeno_a.png",330,325)
 	littlePig:setReferencePoint(display.CenterReferencePoint)
 	littlePig.x, littlePig.y = halfW -270, halfH +150 
 
-	mediumPig = display.newImageRect("images/cerdito_mediano_a.png",230,320)
+	mediumPig = display.newImageRect("images/scene1/cerdito_mediano_a.png",230,320)
 	mediumPig:setReferencePoint(display.CenterReferencePoint)
 	mediumPig.x, mediumPig.y = halfW , halfH +150
 
-	bigPig = display.newImageRect("images/cerdito_grande_a.png",250,355)
+	bigPig = display.newImageRect("images/scene1/cerdito_grande_a.png",250,355)
 	bigPig:setReferencePoint(display.CenterReferencePoint)
 	bigPig.x, bigPig.y = halfW +250 , halfH +130
 		
@@ -99,6 +98,7 @@ function scene:createScene( event )
 	group:insert(mediumPig)
 	group:insert(bigPig)
 	group:insert(nextButton)
+	group:insert(treeAnimation)
 end
 
 -- Called immediately after scene has moved onscreen:
@@ -137,9 +137,7 @@ function scene:exitScene(event)
 	littlePig:removeEventListener("touch",littlePig)
 	mediumPig:removeEventListener("touch",mediumPig)
 	bigPig:removeEventListener("touch",bigPig)
-	treeAnimation:removeEventListener("touch",treeAnimation)
 	treeAnimation:stop()
-
 
 end
 
