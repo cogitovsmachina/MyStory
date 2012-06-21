@@ -2,7 +2,6 @@
 
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
-
 --------------------------------------------
 
 -- forward declarations and other locals
@@ -10,7 +9,7 @@ local background
 -- Touch listener function for background object
 local function onBackgroundTouch( self, event )
 	-- go to level1.lua scene
-	storyboard.gotoScene( "scene1", "fade", 500 )
+	storyboard.gotoScene( "scene1", "fade", 350 )
 	return true	-- indicates successful touch
 end
 

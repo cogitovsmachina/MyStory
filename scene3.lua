@@ -22,7 +22,7 @@ end
 
 local function onBackButtonTouch(self,event)
 	if (event.phase == "ended") then
-		storyboard.gotoScene( "scene2", "slideRight", 500 )
+		storyboard.gotoScene( "scene2", "slideRight", 350 )
 		print("Back Button Pressed")
 	end
 	return true	
@@ -39,9 +39,6 @@ end
 -- Called when the scene's view does not exist:
 function scene:createScene(event)
 	local group = self.view
-
-	-- Purging last Scene
-	storyboard.purgeScene("scene2")
 
 	-- display a background image
 	background = display.newImageRect("images/scene3/background_botones.png", display.contentWidth, display.contentHeight)
@@ -71,6 +68,9 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene(event)
 	local group = self.view
+
+	-- Purging last Scene
+	storyboard.purgeScene("scene2")
 
 -- Narrator voice starts
 	narrationSpeech = audio.loadSound("sounds/third_scene.mp3")

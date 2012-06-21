@@ -14,7 +14,7 @@ local myAnim
 
 local function onNextButtonTouch(self,event)
 	if (event.phase == "ended") then
-		storyboard.gotoScene( "scene3", "slideLeft", 500 )
+		storyboard.gotoScene( "scene3", "slideLeft", 350 )
 		print("Next Button Pressed")
 	end
 	return true	
@@ -122,6 +122,8 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene(event)
 	local group = self.view
+	storyboard.purgeScene("scene1")
+
 
 -- Purging last Scene
 	storyboard.purgeScene("scene1")
@@ -164,7 +166,6 @@ function scene:exitScene( event )
 	mediumPig:removeEventListener("touch",mediumPig)
 	bigPig:removeEventListener("touch",bigPig)
 	audio.stop(wolf_sound)
-
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:

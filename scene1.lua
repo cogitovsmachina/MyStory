@@ -15,7 +15,7 @@ local myAnim, tree
 
 local function onNextButtonTouch(self,event)
 	if (event.phase == "ended") then
-		storyboard.gotoScene( "scene2", "slideLeft", 500 )
+		storyboard.gotoScene( "scene2", "slideLeft", 350 )
 		print("Next Button Pressed")
 	end
 	return true	
@@ -63,15 +63,10 @@ end
 function scene:createScene( event )
 	local group = self.view
   
-local listener3 = function( obj )
+local treeTransition = function( obj )
         print( "Tree has done transition" .. tostring( obj ) )
 end
 
-	tree = display.newImageRect("images/scene1/tree.png",400,500)
-	tree:setReferencePoint(display.BottomLeftReferencePoint)
-	tree.x, tree.y = 0,650
-	tree.alpha = 0
-	transition.to( tree, { time=500, delay=2500, alpha=1.0, onComplete=listener3} ) 
 
 	-- display a background image
 	background = display.newImageRect("images/scene1/img_bosques.png", display.contentWidth, display.contentHeight)
@@ -94,20 +89,28 @@ end
 	bigPig:setReferencePoint(display.CenterReferencePoint)
 	bigPig.x, bigPig.y = halfW +250 , halfH +130
 
+	tree = display.newImageRect("images/scene1/tree.png",400,500)
+	tree:setReferencePoint(display.BottomLeftReferencePoint)
+	tree.x, tree.y = 0,650
+	tree.alpha = 0
+
+	transition.to( tree, { time=600, delay=4200, alpha=1.0, onComplete=treeTransition} ) 
+
+
 	-- all display objects must be inserted into group
 	group:insert(background)
 	group:insert(littlePig)
 	group:insert(mediumPig)
 	group:insert(bigPig)
 	group:insert(nextButton)
-	--group:insert(tree)
+	group:insert(tree)
+	
 end
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene(event)
 	local group = self.view
-	-- Starting Tree Animation
-	--treeAnimation:play{startFrame=1, endFrame=7, loop=1, remove=false}
+	storyboard.purgeScene("homescreen")
 
 -- Narrator voice starts
 	narrationSpeech = audio.loadSound("sounds/first_scene.mp3")
@@ -139,7 +142,7 @@ function scene:exitScene(event)
 	littlePig:removeEventListener("touch",littlePig)
 	mediumPig:removeEventListener("touch",mediumPig)
 	bigPig:removeEventListener("touch",bigPig)
-	treeAnimation:stop()
+
 
 end
 
